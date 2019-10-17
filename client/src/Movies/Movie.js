@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import MovieCard from "./MovieCard";
+import { Route } from "react-router-dom";
+import UpdateForm from "./UpdateForm";
 export default class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -36,13 +38,22 @@ export default class Movie extends React.Component {
       return <div>Loading movie information...</div>;
     }
 
+  
+
+
     return (
+      <>
+    
       <div className="save-wrapper">
         <MovieCard movie={this.state.movie} />
         <div className="save-button" onClick={this.saveMovie}>
           Save
         </div>
+        <button onClick={() => this.props.history.push(`/update-movie/${this.state.movie.id}`)}>Edit</button>
+        <button>Delete</button>
       </div>
+      </>
     );
+  
   }
 }
