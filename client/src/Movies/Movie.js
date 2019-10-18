@@ -39,6 +39,11 @@ export default class Movie extends React.Component {
     .delete(`http://localhost:5000/api/movies/${this.state.movie.id}`)
     .then(res => {
       console.log("delete res", res)
+      const newDeleted = this.props.movies.filter(color =>
+        res.data !== color.id)
+        
+    this.props.setMovies(newDeleted)
+      this.props.history.push("/")
     })
   } 
 

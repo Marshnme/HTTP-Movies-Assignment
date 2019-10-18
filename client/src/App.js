@@ -17,7 +17,7 @@ const App = () => {
       .get("http://localhost:5000/api/movies")
       .then(res => setMovies(res.data))
       .catch(err => console.log(err.response));
-  },[])
+  },[setMovies])
 
 
 
@@ -33,7 +33,7 @@ const App = () => {
       <Route
         path="/movies/:id"
         render={props => {
-          return <Movie {...props} addToSavedList={addToSavedList} />;
+          return <Movie {...props} addToSavedList={addToSavedList} movies={movies} setMovies={setMovies} />;
         }}
       />
       <Route path="/update-movie/:id" render={props => { return <UpdateForm movies={movies} setMovies={setMovies} {...props}/>}}/>

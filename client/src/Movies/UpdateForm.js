@@ -17,6 +17,9 @@ const UpdateForm = (props) => {
     const [movie,setMovie]= useState(initialItem)
 
 
+    
+
+
     useEffect(()=> {
         
         const MovieToEdit =  props.movies.find(movie => 
@@ -27,7 +30,7 @@ const UpdateForm = (props) => {
 
     // props.movies, props.match.params.id
     const changeHandler = e => {
-        // e.persist();
+        e.persist();
 
         setMovie({
             ...movie,
@@ -38,24 +41,22 @@ const UpdateForm = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const newList = {
-            id: movie.id,
-            title: movie.title,
-            director: movie.director,
-            metascore: movie.metascore,
-            stars: movie.stars
-        };
-        axios
-        .put(`http://localhost:5000/api/movies/${movie.id}` , newList)
-        .then(res => {
-            setMovie( {id: movie.id,
-            title: "",
-            director: "",
-            metascore: "",
-            stars: ""})
-
-            props.setMovies(movie.id === res.data.id && res.data)
+    
         
+        axios
+        .put(`http://localhost:5000/api/movies/${movie.id}` , movie)
+        .then(res => {
+            const newMovies = props.movies.map(color =>{
+                if(movie.id === color.id){
+                    return res.data
+                }else{
+                    return color
+                }
+                
+            })
+            props.setMovies(newMovies)
+        
+            
             console.log("edit res", res)
             props.history.push(`/`)
         })
