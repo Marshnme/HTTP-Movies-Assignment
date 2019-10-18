@@ -13,24 +13,24 @@ const initialItem = {
 
 
 const UpdateForm = (props) => {
-    console.log(props)
-    const [item,setItem]= useState(initialItem)
-console.log(item);
+    console.log("form prop",props)
+    const [movie,setMovie]= useState(initialItem)
+
 
     useEffect(()=> {
-        const itemToEdit = props.movies.find(movie => 
+        
+        const MovieToEdit =  props.movies.find(movie => 
             `${movie.id}` === props.match.params.id
-        );if (itemToEdit) {
-            setItem(itemToEdit)
-        }
+        );if (MovieToEdit) {
+            setMovie(MovieToEdit);}
     },[props.movies, props.match.params.id])
 
-
+    // props.movies, props.match.params.id
     const changeHandler = e => {
         // e.persist();
 
-        setItem({
-            ...item,
+        setMovie({
+            ...movie,
             [e.target.name]: e.target.value
         });
     }
@@ -38,24 +38,40 @@ console.log(item);
 
     const handleSubmit = e => {
         e.preventDefault();
+        const newList = {
+            id: movie.id,
+            title: movie.title,
+            director: movie.director,
+            metascore: movie.metascore,
+            stars: movie.stars
+        };
         axios
-        .put(`http://localhost:5000/api/movies/${item.id}` , item)
+        .put(`http://localhost:5000/api/movies/${movie.id}` , newList)
         .then(res => {
-            console.log(res);
+            setMovie( {id: movie.id,
+            title: "",
+            director: "",
+            metascore: "",
+            stars: ""})
+
+            props.setMovies(movie.id === res.data.id && res.data)
+        
+            console.log("edit res", res)
+            props.history.push(`/`)
         })
         .catch(err => console.log(err.message))
     }
 
     return(
     <div>
-        <h2>Update Item</h2>
+        <h2>Update movie</h2>
         <form onSubmit={handleSubmit}>
             <input
             type="text"
             name="title"
             onChange={changeHandler}
             placeholder="title"
-            value={item.title}
+            value={movie.title}
             />
             <div className="baseline" />
 
@@ -64,7 +80,7 @@ console.log(item);
             name="director"
             onChange={changeHandler}
             placeholder="director"
-            value={item.director}
+            value={movie.director}
             />
             <div className="baseline" />
 
@@ -73,7 +89,7 @@ console.log(item);
             name="metascore"
             onChange={changeHandler}
             placeholder="metascore"
-            value={item.metascore}
+            value={movie.metascore}
             />
             <div className="baseline" />
 
@@ -82,7 +98,7 @@ console.log(item);
             name="stars"
             onChange={changeHandler}
             placeholder="stars"
-            value={item.stars}
+            value={movie.stars}
             />
             <div className="baseline" />
 
